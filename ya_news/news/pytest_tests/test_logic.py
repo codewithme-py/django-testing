@@ -1,15 +1,17 @@
 from http import HTTPStatus
 
 import pytest
+from pytest_django.asserts import assertFormError, assertRedirects
+
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment
-from pytest_django.asserts import assertFormError, assertRedirects
 
 FORM_DATA = {'text': 'Новый текст'}
 BAD_WORDS_DATA = [{'text': word} for word in BAD_WORDS]
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 def test_anonymous_user_cant_create_comment(
         client, news_detail_url, redirect_to_news_detail
 ):

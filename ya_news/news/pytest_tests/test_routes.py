@@ -3,6 +3,8 @@ from http import HTTPStatus
 import pytest
 from pytest_django.asserts import assertRedirects
 
+pytestmark = pytest.mark.django_db
+
 NEWS_HOME_URL = pytest.lazy_fixture('news_home_url')
 NEWS_DETAIL_URL = pytest.lazy_fixture('news_detail_url')
 USERS_LOGIN_URL = pytest.lazy_fixture('users_login_url')
@@ -17,24 +19,27 @@ CLIENT = pytest.lazy_fixture('client')
 AUTHOR_CLIENT = pytest.lazy_fixture('author_client')
 READER_CLIENT = pytest.lazy_fixture('reader_client')
 
+HTTP_OK = HTTPStatus.OK
+HTTP_FOUND = HTTPStatus.FOUND
+HTTP_NOT_FOUND = HTTPStatus.NOT_FOUND
+
 
 @pytest.mark.parametrize(
     'url, parametrized_client, expected_status',
     (
-        (NEWS_HOME_URL, CLIENT, HTTPStatus.OK),
-        (NEWS_DETAIL_URL, CLIENT, HTTPStatus.OK),
-        (USERS_LOGIN_URL, CLIENT, HTTPStatus.OK),
-        (USERS_LOGOUT_URL, CLIENT, HTTPStatus.OK),
-        (USERS_SIGNUP_URL, CLIENT, HTTPStatus.OK),
-        (NEWS_EDIT_URL, CLIENT, HTTPStatus.FOUND),
-        (NEWS_DELETE_URL, CLIENT, HTTPStatus.FOUND),
-        (NEWS_EDIT_URL, AUTHOR_CLIENT, HTTPStatus.OK),
-        (NEWS_DELETE_URL, AUTHOR_CLIENT, HTTPStatus.OK),
-        (NEWS_EDIT_URL, READER_CLIENT, HTTPStatus.NOT_FOUND),
-        (NEWS_DELETE_URL, READER_CLIENT, HTTPStatus.NOT_FOUND),
+        (NEWS_HOME_URL, CLIENT, HTTP_OK),
+        (NEWS_DETAIL_URL, CLIENT, HTTP_OK),
+        (USERS_LOGIN_URL, CLIENT, HTTP_OK),
+        (USERS_LOGOUT_URL, CLIENT, HTTP_OK),
+        (USERS_SIGNUP_URL, CLIENT, HTTP_OK),
+        (NEWS_EDIT_URL, CLIENT, HTTP_FOUND),
+        (NEWS_DELETE_URL, CLIENT, HTTP_FOUND),
+        (NEWS_EDIT_URL, AUTHOR_CLIENT, HTTP_OK),
+        (NEWS_DELETE_URL, AUTHOR_CLIENT, HTTP_OK),
+        (NEWS_EDIT_URL, READER_CLIENT, HTTP_NOT_FOUND),
+        (NEWS_DELETE_URL, READER_CLIENT, HTTP_NOT_FOUND),
     )
 )
-@pytest.mark.django_db
 def test_pages_availability(url, parametrized_client, expected_status):
     """
     Тест проверяет доступность страниц.

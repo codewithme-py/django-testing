@@ -1,9 +1,10 @@
 from http import HTTPStatus
 
+from pytils.translit import slugify
+
 import notes.tests.conftest as conf
 from notes.forms import WARNING
 from notes.models import Note
-from pytils.translit import slugify
 
 
 class TestNoteCreateEditDelete(conf.TestBase):

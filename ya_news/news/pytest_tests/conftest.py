@@ -1,10 +1,12 @@
 from datetime import datetime, timedelta
 
 import pytest
+
 from django.conf import settings
 from django.test.client import Client
 from django.urls import reverse
 from django.utils import timezone
+
 from news.models import Comment, News
 
 
@@ -39,12 +41,11 @@ def news():
 
 @pytest.fixture
 def news_collection():
-    today = datetime.today()
     News.objects.bulk_create(
         News(
             title=f'Новость {index}',
             text='Текст',
-            date=today - timedelta(days=index)
+            date=datetime.today() - timedelta(days=index)
         ) for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
 
