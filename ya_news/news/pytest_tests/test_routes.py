@@ -3,8 +3,6 @@ from http import HTTPStatus
 import pytest
 from pytest_django.asserts import assertRedirects
 
-pytestmark = pytest.mark.django_db
-
 NEWS_HOME_URL = pytest.lazy_fixture('news_home_url')
 NEWS_DETAIL_URL = pytest.lazy_fixture('news_detail_url')
 USERS_LOGIN_URL = pytest.lazy_fixture('users_login_url')
@@ -36,6 +34,7 @@ READER_CLIENT = pytest.lazy_fixture('reader_client')
         (NEWS_DELETE_URL, READER_CLIENT, HTTPStatus.NOT_FOUND),
     )
 )
+@pytest.mark.django_db
 def test_pages_availability(url, parametrized_client, expected_status):
     """
     Тест проверяет доступность страниц.
